@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itheima.mapper.PatientMapper">
+    <!-- 一对一，一个患者对应一个科室，用多表查询语句，需要定义别名来防止列名冲突-->
+    <resultMap id="patientMapping" type="Patient">
+        <id column="pid" property="id"></id>
+        <result column="pname" property="name"></result>
+        <result column="gender" property="gender"></result>
+        <result column="did" property="did"></result>
+        <result column="content" property="content"></result>
+        <association property="department" javaType="Department">
+            <id column="did" property="id"></id>
+            <result column="dname" property="name"></result>
+        </association>
+    </resultMap>
+
+    <select id="findAll" resultMap="patientMapping" >
+        select *,p.id pid,p.name pname,d.name dname from patient p,Department d where p.did=d.id
+    </select>
+
+
+    <!--一对一查询，把查询的患者表中的科室id作为参数，再去根据这个did去科室表查询科室名称,由于是两条sql语句去查询，所以不用别名-->
+    <resultMap id="patientMapping2" type="Patient">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="gender" property="gender"></result>
+        <result column="did" property="did"></result>
+        <result column="content" property="content"></result>
+        <association
+                property="department"
+                column="did"
+                select="com.itheima.mapper.DepartmentMapper.findById">
+        </association>
+    </resultMap>
+
+    <select id="findByName" parameterType="string" resultMap="patientMapping2">
+        select * from patient
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                and name like #{name}
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="patient">
+    insert into registration.patient
+        (id,
+        name,
+        gender,
+        did,
+        content
+        )
+        values
+        (null,
+        #{name},
+        #{gender},
+        #{did},
+        #{content}
+        )
+    </insert>
+</mapper>

@@ -1,0 +1,10 @@
+com\itheima\service\impl\PatientServiceImpl.class
+com\itheima\domain\Department.class
+com\itheima\controller\PatientController.class
+com\itheima\controller\DepartmentController.class
+com\itheima\service\PatientService.class
+com\itheima\service\impl\DepartmentServiceImpl.class
+com\itheima\mapper\PatientMapper.class
+com\itheima\mapper\DepartmentMapper.class
+com\itheima\service\DepartmentService.class
+com\itheima\domain\Patient.class
